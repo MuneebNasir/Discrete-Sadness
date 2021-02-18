@@ -1,4 +1,4 @@
-class event:
+class Event:
 
     def __init__(self, end_time, event_type, component_name):
         self.end_time = end_time
