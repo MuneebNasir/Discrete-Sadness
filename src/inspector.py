@@ -30,31 +30,18 @@ class Inspector:
             if workstation.is_buffer_free("B2"):
                 self.workstation.add_component(self.component, "B2")
     
-    def retrieve_service_times(self, inspector_type, component_name):
-        service_times_I1 = []
-        service_times_I2 = []
-        service_times_I3 = []
+    def retrieve_service_times_nsp1(self):
+        file = "../resources/servinsp1.dat"
+        return self.read_file(file)
 
-        file = None 
-        if inspector_type == "I1":
-            file = "../resources/servinsp1.dat"
+    def retrieve_service_times_nsp2(self):
+        file = "../resources/servinsp22.dat"
+        return self.read_file(file)
 
-        if inspector_type == "I2" or component_name =="C2":
-            file = "../resources/servinsp22.dat"
-
-        if inspector_type == "I2" or component_name =="C3":
-            file = "../resources/servinsp23.dat"
-
-        if file is not None: 
-            if "servinsp1" in file:
-                service_times_I1 = self.read_file(file)
-
-            if "servinsp22" in file:
-                service_times_I2 = self.read_file(file)
-
-            if "servinsp23" in file:
-                service_times_I3 = self.read_file(file)
-
+    def retrieve_service_times_nsp3(self):
+        file = "../resources/servinsp23.dat"
+        return self.read_file(file)
+    
     def read_file(self, file):
         time_values = []
         with open(file, "rt") as data:

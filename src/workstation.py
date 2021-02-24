@@ -57,34 +57,17 @@ class Workstation:
         if buffer_type == 'B2':
             self.buffer2.append(component)
 
+    def retrieve_process_times_ws1(self):
+        file = "../resources/ws1.dat"
+        return self.read_file(file)
 
-    def retrieve_service_times(self):
-        process_times_W1 = []
-        process_times_W2 = []
-        process_times_W3 = []
+    def retrieve_process_times_ws2(self):
+        file = "../resources/ws2.dat"
+        return self.read_file(file)
 
-        file = None 
-
-        # W1
-        if self.buffer2 is None:
-            file = "../resources/ws1.dat"
-
-        if self.buffer2[0].name == 'C2':
-            file = "../resources/ws2.dat"
-
-        if self.buffer2[0].name == 'C3':
-            file = "../resources/ws3.dat"
-
-        if file is not None: 
-            if "ws1" in file:
-                process_times_W1 = self.read_file(file)
-
-            if "ws2" in file:
-                process_times_W2 = self.read_file(file)
-
-            if "ws3" in file:
-                process_times_W3 = self.read_file(file)
-
+    def retrieve_process_times_ws3(self):
+        file = "../resources/ws3.dat"
+        return self.read_file(file)
 
     def read_file(self, file):
         time_values = []
