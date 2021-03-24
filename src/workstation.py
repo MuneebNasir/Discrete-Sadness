@@ -1,4 +1,4 @@
-from Component import *
+from component import *
 
 class Workstation:
 
@@ -80,4 +80,6 @@ class Workstation:
         return time_values
 
 
-
+if __name__ == "__main__":
+    c = Component("Test Name")
+    print(c.get_name())

@@ -1,5 +1,5 @@
-from Workstation import *
-from Component import *
+from workstation import *
+from component import *
 
 class Inspector:
 
@@ -15,19 +15,19 @@ class Inspector:
 
         if self.component.name == "C1":
             print("Inspector 1: Inspecting Item {} ".format(self.component.name))
-            if workstation.is_buffer_free("B1"):
+            if self.workstation.is_buffer_free("B1"):
                 self.workstation.add_component(self.component, "B1")
 
 
         if self.component.name == "C2":
             print("Inspector 2: Inspecting Item {} ".format(self.component.name))
-            if workstation.is_buffer_free("B2"):
+            if self.workstation.is_buffer_free("B2"):
                 self.workstation.add_component(self.component, "B2")
 
 
         if self.component.name == "C3":
             print("Inspector 2: Inspecting Item {} ".format(self.component.name))
-            if workstation.is_buffer_free("B2"):
+            if self.workstation.is_buffer_free("B2"):
                 self.workstation.add_component(self.component, "B2")
     
     def retrieve_service_times_nsp1(self):
