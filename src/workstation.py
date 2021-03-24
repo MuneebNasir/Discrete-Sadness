@@ -4,9 +4,9 @@ class Workstation:
 
     is_busy = False
 
-    def __init__(self, buffer=None):
-        self.buffer = buffer
-        self.buffer2 = None
+    def __init__(self):
+        self.buffer = []
+        self.buffer2 = []
 
 
     def set_buffers(self, buffer2):
@@ -79,7 +79,3 @@ class Workstation:
 
         return time_values
 
-
-if __name__ == "__main__":
-    c = Component("Test Name")
-    print(c.get_name())

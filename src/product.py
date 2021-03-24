@@ -1,3 +1,4 @@
+import numpy
 
 class Product:
 
@@ -18,6 +19,5 @@ class Product:
 
     def get_product_components(self):
         return self.component, self.component2
-
 
     

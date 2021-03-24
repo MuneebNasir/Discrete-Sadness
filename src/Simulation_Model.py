@@ -39,5 +39,5 @@ i = 0
 while i < 10:
     i += 1
     # Creating the Component Using Random Number Generator 
-    component_new = Component("C{}".format(random.randint(1, 3)))
+    component_new = Component("C{}".format(random.randint(1, 5)))
     print(component_new.name)

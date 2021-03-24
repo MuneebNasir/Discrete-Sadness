@@ -1,5 +1,6 @@
 from workstation import *
 from component import *
+import numpy
 
 class Inspector:
 
@@ -51,6 +52,3 @@ class Inspector:
 
 
         return time_values
-
-
-
