@@ -16,60 +16,63 @@ class Inspector:
         for workstation in workstations:
             self.workstations.append(workstation)
 
+    def test(self):
+        print("Inspector {} is running".format(self.inspector_num))
+        print("Inspector {} is {}".format(self.inspector_num, self.calculate_service_time(2)))
 
     def run(self):
         print("Inspector {} is running".format(self.inspector_num))
 
         while True:
-            service_time = random.randint(1,10)
-            self.tracking_vars.add_insp_1_st(service_time)
+            service_time = self.calculate_service_time(component_num)
+            if self.inspector_num == 1:
+                self.inspector_one(service_time)
+            else:
+                self.inspector_two(service_time)            
 
+    #function for inspector one
+    def inspector_one(self, service_time):
+        self.tracking_vars.add_inspector_service_time(service_time, 1)
+        yield self.env.timeout(service_time)
+        blocked_time = self.env.now
+        
+        if self.workstations[0].buffers[0].level <= self.workstations[1].buffers[0].level or self.workstations[0].buffers[0].level <= self.workstations[2].buffers[0].level:
+            yield self.workstations[0].buffers[0].put(1)
+            print("Added component 1 to workstation 1")
+        elif self.workstations[1].buffers[0].level <= self.workstations[2].buffers[0].level:
+            yield self.workstations[1].buffers[0].put(1)
+            print("Added component 1 to workstation 2")
+        else:
+            yield self.workstations[2].buffers[0].put(1)
+            print("Added component 1 to workstation 3")
 
-
-
-
-
-
-    # def set_component(self, component):
-    # 	self.component = component
-
-    # def inspect_component(self):
-
-    #     if self.component.name == "C1":
-    #         print("Inspector 1: Inspecting Item {} ".format(self.component.name))
-    #         if self.workstation.is_buffer_free("B1"):
-    #             self.workstation.add_component(self.component, "B1")
-
-
-    #     if self.component.name == "C2":
-    #         print("Inspector 2: Inspecting Item {} ".format(self.component.name))
-    #         if self.workstation.is_buffer_free("B2"):
-    #             self.workstation.add_component(self.component, "B2")
-
-
-    #     if self.component.name == "C3":
-    #         print("Inspector 2: Inspecting Item {} ".format(self.component.name))
-    #         if self.workstation.is_buffer_free("B2"):
-    #             self.workstation.add_component(self.component, "B2")
+        self.tracking_vars.add_inspector_blocked_time(self.env.now - blocked_time, 1)
     
-    # def retrieve_service_times_nsp1(self):
-    #     file = "../resources/servinsp1.dat"
-    #     return self.read_file(file)
-
-    # def retrieve_service_times_nsp2(self):
-    #     file = "../resources/servinsp22.dat"
-    #     return self.read_file(file)
-
-    # def retrieve_service_times_nsp3(self):
-    #     file = "../resources/servinsp23.dat"
-    #     return self.read_file(file)
+    #function for inspector two
+    def inspector_two(self, service_time):
+        component_num = random.randint(2,3)
+        self.tracking_vars.add_inspector_service_time(service_time, 20 + component_num)
+        yield self.env.timeout(service_time)
+        blocked_time = self.env.now
+        yield self.workstations[component_num - 1].buffers[1].put(1) 
+        self.tracking_vars.add_inspector_blocked_time(self.env.now - block_time, component_num)
+        print("Added component {} to workstation {}".format(component_num))
+        
     
-    # def read_file(self, file):
-    #     time_values = []
-    #     with open(file, "rt") as data:
-    #         for time_value in data:
-    #             if time_value.strip():
-    #                 time_values.append(time_value.strip())
+    #opens the data files and calls the function to calcultate the proper value
+    def calculate_service_time(self, component_num):
+        if self.inspector_num == 1:
+            file_name = "servinsp{}.dat".format(self.inspector_num)
+        else:
+            file_name = "servinsp{}{}.dat".format(self.inspector_num, component_num)
+        
+        data = open("../resources/{}".format(file_name)).read().splitlines()
+        return self.calculate_rand_value(data)
 
-
-    #     return time_values
+    #finds the mean of the given data then returns a random value based on the numpy exponential function
+    def calculate_rand_value(self, data):
+        datatotal = 0
+        for i in range(0,300):
+            datatotal += float(data[i])
+        mean = datatotal / 300
+        return numpy.random.exponential(mean)*60

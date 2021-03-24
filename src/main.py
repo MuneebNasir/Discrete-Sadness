@@ -21,9 +21,12 @@ if __name__ == "__main__":
         workstation_two = Workstation(environment, 2, tracking_vars, 2)
         workstation_three = Workstation(environment, 2, tracking_vars, 3)
 
-        # insepctor_one = Inspector([workstation_one, workstation_two, workstation_three])
-        # inspector_two = Inspector([workstation_two, workstation_three])
+        insepctor_one = Inspector(environment, tracking_vars, [workstation_one, workstation_two, workstation_three], 1)
+        inspector_two = Inspector(environment, tracking_vars, [workstation_two, workstation_three], 2)
 
         workstation_one.test()
         workstation_two.test()
         workstation_three.test()
+
+        insepctor_one.test()
+        inspector_two.test()
