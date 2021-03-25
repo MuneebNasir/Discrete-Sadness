@@ -1,7 +1,7 @@
-from Workstation import *
-from Component import *
-from Inspector import *
 import random
+from workstation import *
+from component import *
+from inspector import *
 
 # ALQ - Arrival at Inspector Queue 
 # ES - End Component Servcing 
@@ -31,13 +31,13 @@ w2.assemble_product()
 w3.assemble_product()
 i1 = Inspector(w1)
 i2 = Inspector(w1)
-i1.retrieve_service_times("I1", "C1")
-w3.retrieve_service_times()
+i1.retrieve_service_times_nsp1()
+w3.retrieve_process_times_ws1()
 
 # Need to process the FEL 
 i = 0 
 while i < 10:
     i += 1
     # Creating the Component Using Random Number Generator 
-    component_new = Component("C{}".format(random.randint(1, 3)))
+    component_new = Component("C{}".format(random.randint(1, 5)))
     print(component_new.name)

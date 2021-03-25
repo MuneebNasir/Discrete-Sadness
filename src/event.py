@@ -6,10 +6,10 @@ class Event:
         self.component_name = component_name
 
     def get_end_time(self):
-        return end_time
+        return self.end_time
 
     def get_event_type(self):
-        return event_type
+        return self.event_type
 
     def get_component_name(self):
-        return component_name
+        return self.component_name
