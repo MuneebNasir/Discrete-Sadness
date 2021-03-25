@@ -1,9 +1,11 @@
 import csv
+from pathlib import Path
 
-OUT_DIR = '../output/'
+OUT_DIR = '../output'
 
 
 def write_output(metrics, sim_data, sim_rep):
+    Path(OUT_DIR).mkdir(parents=True, exist_ok=True)
     if 'service_time' == metrics:
         for key, value in sim_data.service_times.items():
             with open('{}/{}_{}_R{}.csv'.format(OUT_DIR, metrics, key, sim_rep), 'w', newline='') as file:
