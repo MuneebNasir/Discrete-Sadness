@@ -68,4 +68,4 @@ class Inspector:
         for i in range(0,300):
             datatotal += float(data[i])
         mean = datatotal / 300
-        return numpy.random.exponential(mean)*60
+        return numpy.random.exponential(mean)
