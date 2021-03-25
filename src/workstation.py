@@ -25,9 +25,6 @@ class Workstation:
         
         self.action = env.process(self.run())
 
-    def test(self):
-        print("Workstation {} is running".format(self.work_num))
-        print(self.calculate_service_time())
 
     def run(self):
         print("Workstation {} is running".format(self.work_num))        
@@ -40,11 +37,11 @@ class Workstation:
             else:
                 yield self.buffers[0].get(1) & self.buffers[1].get(1)
 
-            self.tracking_vars.add_workstation_idle_time(value, self.work_num)
-            service_time = calculate_service_time()
-            self.tracking_vars.add_worskation_service_time()
+            self.tracking_vars.add_workstation_idle_time(self.env.now - idle_timer, self.work_num)
+            service_time = self.calculate_service_time()
+            self.tracking_vars.add_worskation_service_time(service_time, self.work_num)
             yield self.env.timeout(service_time)
-            self.tracking_vars.add_product(work_num)
+            self.tracking_vars.add_product(self.work_num)
             print("Product {} has been created".format(self.work_num))
 
 

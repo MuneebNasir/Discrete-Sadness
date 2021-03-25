@@ -16,3 +16,8 @@ Each workstation has a buffer capacity of two components, with one buffer availa
 A product can begin being assembled only when components of all types required are available. 
 If all workstation buffers for a specific type of components are full, the corresponding inspector who finished inspecting a component with the same type is
 considered “blocked" until there is an opening, at which time the inspector can resume processing and sending components of that type.
+
+# How to run
+1. Clone the repository
+2. Install the dependencies of numpy, scipy, and simpy through pip
+3. Run the main.py file
