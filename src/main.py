@@ -7,16 +7,18 @@ from workstation import *
 from component import *
 from inspector import *
 from variables import *
+import performance_metrics
+import utils
 
 
-ITERATIONS = 2
+SIMULATION_REPLICATION = 3
 
 
 if __name__ == "__main__":
     outputs = []
-    for i in range(0, ITERATIONS):
+    for i in range(0, SIMULATION_REPLICATION):
 
-        print("Running iteration {}".format(i + 1))
+        print("Running Replication {}".format(i + 1))
         environment = simpy.Environment()
         tracking_vars = TrackingVariables()
 
@@ -37,14 +39,29 @@ if __name__ == "__main__":
 
     #end loop
     print("Simulation has ended")
-    
-    for data in outputs:
-        for key, value in data.service_times.items():
+
+    print("\n==================== SIMULATION SUMMARY ====================\n")
+    print("Total Number of Replications: {} \n".format(SIMULATION_REPLICATION))
+    for index in range(0, len(outputs)):
+        print("Simulation Replication Number: {} Summary".format(index + 1))
+        for key, value in outputs[index].service_times.items():
             print("{} : {}".format(key, value))
-        for key, value in data.idle_times.items():
-            print("Idle {} : {}".format(key, value))
-        for key, value in data.block_times.items():
-            print("Block {} : {}".format(key, value))
-        for key, value in data.products.items():
-            print("Product {} : {}".format(key, value))
+        utils.write_output('service_time', outputs[index], index + 1)
+
+        for key, value in outputs[index].idle_times.items():
+            print("Idle Time Workstation {} : {}".format(key, value))
+        utils.write_output('idle_time', outputs[index], index + 1)
+
+        for key, value in outputs[index].block_times.items():
+            print("Blocked Time Inspector {} : {}".format(key, value))
+        utils.write_output('blocked_time', outputs[index], index + 1)
+
+        for key, value in outputs[index].products.items():
+            print("Product Developed (Throughput) {} : {}".format(key, value))
+        utils.write_output('product', outputs[index], index + 1)
+
+        performance_metrics.calculate_output_statistics(outputs[index])
+        print("========================================\n")
+
+
 

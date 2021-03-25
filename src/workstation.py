@@ -1,9 +1,9 @@
+import math
 from component import *
 from variables import *
 from simpy.resources import container
 import simpy
 import numpy
-
 import random
 
 class Workstation:
@@ -57,3 +57,11 @@ class Workstation:
             datatotal += float(data[i])
         mean = datatotal / 300
         return numpy.random.exponential(mean)
+
+    def generate_random_number_ws2(self, mean):
+        # Distribution Parameter for Exponential Distribution
+        lambda_val = 1 / mean
+        # Generating the random number in range [0,1]
+        rand_number = numpy.random.uniform(low=0.0, high=1.0)
+        rand_variate = (-1 / lambda_val) * math.log(rand_number)
+        return rand_variate
