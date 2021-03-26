@@ -24,6 +24,16 @@ class TrackingVariables:
             2: 0,
             3: 0,
         }
+        self.batched_inspector_block_times = {
+            1: [],
+            2: [],
+            3: []
+        }
+        self.batched_product_throughput = {
+            1: [],
+            2: [],
+            3: []
+        }
 
     #inspector 1 service time
     def add_inspector_service_time(self, value, inspector_num):
@@ -49,4 +59,11 @@ class TrackingVariables:
     def add_product(self, work_num):
         index = work_num
         self.products[index] += 1
+
+    # Adding collected results after every 500s
+    def add_batched_inspector_block_times(self, work_num, value):
+        self.batched_inspector_block_times[work_num].append(value)
+
+    def add_batched_product_throughput(self, work_num, value):
+        self.batched_product_throughput[work_num].append(value)
 

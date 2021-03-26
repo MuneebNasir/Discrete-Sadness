@@ -38,7 +38,7 @@ class Inspector:
 
                 self.tracking_vars.add_inspector_blocked_time(self.env.now - blocked_time, 1)
             else:
-                component_num = random.randint(2,3)
+                component_num = random.randint(2, 3)
                 service_time = self.calculate_service_time(component_num)
                 self.tracking_vars.add_inspector_service_time(service_time, 20 + component_num)
                 yield self.env.timeout(service_time)
@@ -47,7 +47,7 @@ class Inspector:
                     index = 0
                 else:
                     index = 1
-                yield self.workstations[index].buffers[1].put(1) 
+                yield self.workstations[index].buffers[1].put(1)
                 self.tracking_vars.add_inspector_blocked_time(self.env.now - blocked_time, component_num)
                 print("Added component {} to workstation {}".format(component_num, component_num))            
         
@@ -69,3 +69,10 @@ class Inspector:
             datatotal += float(data[i])
         mean = datatotal / 300
         return numpy.random.exponential(mean)
+
+    def collect_batch_results_insp(self):
+        """
+        Need to collect results after Every 500s
+        :return:
+        """
+        return None

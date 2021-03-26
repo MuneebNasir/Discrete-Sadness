@@ -11,7 +11,8 @@ import performance_metrics
 import utils
 
 
-SIMULATION_REPLICATION = 3
+SIMULATION_REPLICATION = 5
+
 
 
 if __name__ == "__main__":
@@ -33,8 +34,8 @@ if __name__ == "__main__":
         print("Inspector setup complete")
 
         print("running simulation")
+        # Simulates an Eight Hour Working day
         environment.run(until=28000)
-
         outputs.append(tracking_vars)
 
     #end loop
@@ -57,10 +58,11 @@ if __name__ == "__main__":
         utils.write_output('blocked_time', outputs[index], index + 1)
 
         for key, value in outputs[index].products.items():
-            print("Product Developed (Throughput) {} : {}".format(key, value))
+            print("Total Products Developed (Throughput) {} : {}".format(key, value/28800))
         utils.write_output('product', outputs[index], index + 1)
 
-        performance_metrics.calculate_output_statistics(outputs[index])
+        performance_metrics.calculate_replication_average(outputs[index])
+
         print("========================================\n")
 
 

@@ -65,3 +65,11 @@ class Workstation:
         rand_number = numpy.random.uniform(low=0.0, high=1.0)
         rand_variate = (-1 / lambda_val) * math.log(rand_number)
         return rand_variate
+
+    def collect_batch_results_ws(self):
+        """
+        Need to collect results after Every 500s
+        :return:
+        """
+
+        return None
