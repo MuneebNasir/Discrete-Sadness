@@ -32,3 +32,24 @@ def write_output(metrics, sim_data, sim_rep):
             for key, value in sim_data.products.items():
                 writer = csv.writer(file)
                 writer.writerow([key, value])
+
+    if 'batched_time' == metrics:
+        for key, value in sim_data.batched_inspector_block_times.items():
+            with open('{}/{}_{}_R{}.csv'.format(OUT_DIR, metrics, key, sim_rep), 'w', newline='') as file:
+                writer = csv.writer(file)
+                for data in value:
+                    writer.writerow([data])
+
+        for key, value in sim_data.batched_product_assembled_times.items():
+            with open('{}/{}_product_{}_R{}.csv'.format(OUT_DIR, metrics, key, sim_rep), 'w', newline='') as file:
+                writer = csv.writer(file)
+                for data in value:
+                    writer.writerow([data])
+
+    if 'estimators' == metrics:
+        for key, value in sim_data.items():
+            with open('{}/{}_{}_R{}.csv'.format(OUT_DIR, metrics, key, sim_rep), 'w', newline='') as file:
+                writer = csv.writer(file)
+                for data in value:
+                    writer.writerow([data])
+

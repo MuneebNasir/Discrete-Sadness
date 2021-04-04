@@ -37,6 +37,8 @@ class Inspector:
                     print("Added component 1 to workstation 3")
 
                 self.tracking_vars.add_inspector_blocked_time(self.env.now - blocked_time, 1)
+                # Time Data Collected
+                self.tracking_vars.add_batched_inspector_block_times(1, self.env.now)
             else:
                 component_num = random.randint(2, 3)
                 service_time = self.calculate_service_time(component_num)
@@ -49,6 +51,8 @@ class Inspector:
                     index = 1
                 yield self.workstations[index].buffers[1].put(1)
                 self.tracking_vars.add_inspector_blocked_time(self.env.now - blocked_time, component_num)
+                # Time Data Collected
+                self.tracking_vars.add_batched_inspector_block_times(component_num, self.env.now)
                 print("Added component {} to workstation {}".format(component_num, component_num))            
         
     

@@ -29,7 +29,7 @@ class TrackingVariables:
             2: [],
             3: []
         }
-        self.batched_product_throughput = {
+        self.batched_product_assembled_times = {
             1: [],
             2: [],
             3: []
@@ -60,10 +60,12 @@ class TrackingVariables:
         index = work_num
         self.products[index] += 1
 
-    # Adding collected results after every 500s
+    # Tracking Time When Data Collected For Checking for Data-Collection Phase
     def add_batched_inspector_block_times(self, work_num, value):
         self.batched_inspector_block_times[work_num].append(value)
 
-    def add_batched_product_throughput(self, work_num, value):
-        self.batched_product_throughput[work_num].append(value)
+    # Tracking Time When Data Collected For Checking for Data-Collection Phase
+    def add_batched_product_assembled_times(self, work_num, value):
+        self.batched_product_assembled_times[work_num].append(value)
+
 

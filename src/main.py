@@ -12,8 +12,7 @@ import utils
 
 
 SIMULATION_REPLICATION = 5
-
-
+SIMULATION_TIME = 600000
 
 if __name__ == "__main__":
     outputs = []
@@ -34,8 +33,8 @@ if __name__ == "__main__":
         print("Inspector setup complete")
 
         print("running simulation")
-        # Simulates an Eight Hour Working day
-        environment.run(until=28000)
+        # Simulates an Eight Hour Working day / LONG RUN 10K Minutes
+        environment.run(until=SIMULATION_TIME)
         outputs.append(tracking_vars)
 
     #end loop
@@ -45,25 +44,20 @@ if __name__ == "__main__":
     print("Total Number of Replications: {} \n".format(SIMULATION_REPLICATION))
     for index in range(0, len(outputs)):
         print("Simulation Replication Number: {} Summary".format(index + 1))
-        for key, value in outputs[index].service_times.items():
-            print("{} : {}".format(key, value))
-        utils.write_output('service_time', outputs[index], index + 1)
 
-        for key, value in outputs[index].idle_times.items():
-            print("Idle Time Workstation {} : {}".format(key, value))
-        utils.write_output('idle_time', outputs[index], index + 1)
-
-        for key, value in outputs[index].block_times.items():
-            print("Blocked Time Inspector {} : {}".format(key, value))
-        utils.write_output('blocked_time', outputs[index], index + 1)
-
-        for key, value in outputs[index].products.items():
-            print("Total Products Developed (Throughput) {} : {}".format(key, value/28800))
+        # Inspector Blocked Time
+        # for key, value in outputs[index].block_times.items():
+        #     print("Blocked Time Inspector {} : {}".format(key, value))
+        # utils.write_output('blocked_time', outputs[index], index + 1)
+        # utils.write_output('batched_time', outputs[index], index + 1)
         utils.write_output('product', outputs[index], index + 1)
 
         performance_metrics.calculate_replication_average(outputs[index])
-
         print("========================================\n")
+
+    print("================== Overall Simulation Summary  ======================\n")
+    performance_metrics.calculate_average_across_replications(outputs)
+    print("================== Overall Simulation Summary  ======================\n")
 
 
 

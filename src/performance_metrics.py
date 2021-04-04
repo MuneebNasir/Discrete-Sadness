@@ -1,5 +1,15 @@
 from scipy import stats
 import numpy
+import utils
+
+estimators = {
+    "I1": [],
+    "I2_C2": [],
+    "I2_C3": [],
+    "WS1": [],
+    "WS2": [],
+    "WS3": []
+}
 
 
 def calculate_confidence_interval(data, confidence=0.95):
@@ -38,7 +48,75 @@ def calculate_replication_average(data):
     for key, value in data.products.items():
         print("Product {} (produced in 8 hour period) Average/Mean: {} \n".format(key, numpy.mean(value)))
 
+
+def calculate_throughput(datatotal):
+    simulation_time = 24800
+    return datatotal / simulation_time
+
+
+def calculate_proportion_blocked_time(data):
+    simulation_time = 28800
+    datatotal = 0
+    for i in range(0, len(data)):
+        datatotal += float(data[i])
+    proportion_blocked_time = datatotal / simulation_time
+
+    return proportion_blocked_time
+
+
+def calculate_total_average(data, replications_count):
+    datatotal = 0
+    for i in range(0, len(data)):
+        datatotal += float(data[i])
+
+    return datatotal / replications_count
+
+
+def calculate_average_across_replications(data):
+    replications_count = 0
+    insp_1_blocked_times = []
+    insp_blocked_times_2 = []
+    insp_blocked_times_3 = []
+    products_produced_1 = []
+    products_produced_2 = []
+    products_produced_3 = []
+
+    for variable in data:
+        insp_1_blocked_times.append(calculate_proportion_blocked_time(variable.block_times[1]))
+        estimators["I1"].append(calculate_proportion_blocked_time(variable.block_times[1]))
+
+        insp_blocked_times_2.append(calculate_proportion_blocked_time(variable.block_times[2]))
+        estimators["I2_C2"].append(calculate_proportion_blocked_time(variable.block_times[2]))
+
+        insp_blocked_times_3.append(calculate_proportion_blocked_time(variable.block_times[3]))
+        estimators["I2_C3"].append(calculate_proportion_blocked_time(variable.block_times[3]))
+
+        products_produced_1.append(calculate_throughput(variable.products[1]))
+        estimators["WS1"].append(calculate_throughput(variable.products[1]))
+
+        products_produced_2.append(calculate_throughput(variable.products[2]))
+        estimators["WS2"].append(calculate_throughput(variable.products[2]))
+
+        products_produced_3.append(calculate_throughput(variable.products[3]))
+        estimators["WS3"].append(calculate_throughput(variable.products[3]))
+        replications_count = replications_count + 1
+
+    print("Replications: {}".format(replications_count))
+    print("Inspector 1 (Blocked/Idle Time) Proportion: {} \n".
+          format(calculate_total_average(insp_1_blocked_times, replications_count)))
+    print("Inspector 2 (C2) (Blocked Time/Component) Proportion: {} \n".
+          format(calculate_total_average(insp_blocked_times_2, replications_count)))
+    print("Inspector 2 (C3) (Blocked Time/Component) Proportion: {} \n".
+          format(calculate_total_average(insp_blocked_times_3, replications_count)))
+    print("WS1 Throughput Average/Mean: {} \n".format(calculate_total_average(products_produced_1, replications_count)))
+    print("WS1 Throughput Average/Mean: {} \n".format(calculate_total_average(products_produced_2, replications_count)))
+    print("WS1 Throughput Average/Mean: {} \n".format(calculate_total_average(products_produced_3, replications_count)))
+
+    utils.write_output("estimators", estimators, replications_count)
+
+
 def calculate_statistics_across_replications(data):
+    index = 0
     idle_times_1 = []
     idle_times_2 = []
     idle_times_3 = []
@@ -47,12 +125,13 @@ def calculate_statistics_across_replications(data):
     products_produced_3 = []
 
     for variable in data:
-        idle_times_1.extend(variable.idle_times[1])
-        idle_times_2.extend(variable.idle_times[2])
-        idle_times_3.extend(variable.idle_times[3])
+        idle_times_1.extend(variable.block_times[1])
+        idle_times_2.extend(variable.block_times[2])
+        idle_times_3.extend(variable.block_times[3])
         products_produced_1.append(variable.products[1])
         products_produced_2.append(variable.products[2])
         products_produced_3.append(variable.products[3])
+        index = index + 1
 
     m, h = calculate_confidence_interval(idle_times_1)
     print("Confidence interval for inspector 1 block times is " + str(m) + " ±" + str(h) + "\n")
@@ -76,9 +155,9 @@ def calculate_output_statistics(data):
     Prints the Mean/Average and Standard Error
     """
     print("\nSimulation Output Metrics")
-    for key, idle_times in data.idle_times.items():
+    for key, idle_times in data.block_times.items():
         mean, range_mean = calculate_confidence_interval(idle_times)
-        print("Confidence Interval Inspector {} Idle Time: {} ± {} \n".format(key, str(mean), str(range_mean)))
+        print("Confidence Interval Inspector {} Blocked Time: {} ± {} \n".format(key, str(mean), str(range_mean)))
 
     for key, value in data.products.items():
         mean, range_mean = calculate_confidence_interval(value)
