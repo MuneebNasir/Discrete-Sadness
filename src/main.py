@@ -10,19 +10,35 @@ from variables import *
 import performance_metrics
 import utils
 
-
 SIMULATION_REPLICATION = 5
-SIMULATION_TIME = 600000
+SIMULATION_TIME = None
+ALTERNATE_DESIGN = False
 
-if __name__ == "__main__":
+
+def string_to_bool(param):
+    if param.lower() in ("T", "true", "t", "True"):
+        return True
+    else:
+        return False
+
+
+def run_simulation():
     outputs = []
-    for i in range(0, SIMULATION_REPLICATION):
 
+    # Simulation variables
+    print("Enter Time For Simulation in Seconds (Default - 28,000)")
+    SIMULATION_TIME = int(input("Enter time: ") or "28000")
+    SIMULATION_REPLICATION = int(input("Enter Replications: ") or "70")
+    ALTERNATE_DESIGN = string_to_bool(input("True/False: ") or "False")
+
+    print(SIMULATION_TIME)
+    print(SIMULATION_REPLICATION)
+    for i in range(0, SIMULATION_REPLICATION):
         print("Running Replication {}".format(i + 1))
         environment = simpy.Environment()
         tracking_vars = TrackingVariables()
 
-        #Create the inspectors and workstations
+        # Create the inspectors and workstations
         workstation_one = Workstation(environment, 1, tracking_vars, 1)
         workstation_two = Workstation(environment, 2, tracking_vars, 2)
         workstation_three = Workstation(environment, 2, tracking_vars, 3)
@@ -37,7 +53,7 @@ if __name__ == "__main__":
         environment.run(until=SIMULATION_TIME)
         outputs.append(tracking_vars)
 
-    #end loop
+    # end loop
     print("Simulation has ended")
 
     print("\n==================== SIMULATION SUMMARY ====================\n")
@@ -60,4 +76,5 @@ if __name__ == "__main__":
     print("================== Overall Simulation Summary  ======================\n")
 
 
-
+if __name__ == "__main__":
+    run_simulation()
