@@ -74,9 +74,3 @@ class Inspector:
         mean = datatotal / 300
         return numpy.random.exponential(mean)
 
-    def collect_batch_results_insp(self):
-        """
-        Need to collect results after Every 500s
-        :return:
-        """
-        return None
