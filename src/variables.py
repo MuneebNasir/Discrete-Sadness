@@ -24,6 +24,16 @@ class TrackingVariables:
             2: 0,
             3: 0,
         }
+        self.batched_inspector_block_times = {
+            1: [],
+            2: [],
+            3: []
+        }
+        self.batched_product_assembled_times = {
+            1: [],
+            2: [],
+            3: []
+        }
 
     #inspector 1 service time
     def add_inspector_service_time(self, value, inspector_num):
@@ -49,4 +59,13 @@ class TrackingVariables:
     def add_product(self, work_num):
         index = work_num
         self.products[index] += 1
+
+    # Tracking Time When Data Collected For Checking for Data-Collection Phase
+    def add_batched_inspector_block_times(self, work_num, value):
+        self.batched_inspector_block_times[work_num].append(value)
+
+    # Tracking Time When Data Collected For Checking for Data-Collection Phase
+    def add_batched_product_assembled_times(self, work_num, value):
+        self.batched_product_assembled_times[work_num].append(value)
+
 

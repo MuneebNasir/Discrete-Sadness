@@ -1,9 +1,9 @@
+import math
 from component import *
 from variables import *
 from simpy.resources import container
 import simpy
 import numpy
-
 import random
 
 class Workstation:
@@ -41,7 +41,12 @@ class Workstation:
             service_time = self.calculate_service_time()
             self.tracking_vars.add_worskation_service_time(service_time, self.work_num)
             yield self.env.timeout(service_time)
-            self.tracking_vars.add_product(self.work_num)
+
+            # Time Data Collected
+            if self.env.now > 4000:
+                self.tracking_vars.add_product(self.work_num)
+
+            self.tracking_vars.add_batched_inspector_block_times(self.work_num, self.env.now)
             print("Product {} has been created".format(self.work_num))
 
 
@@ -57,3 +62,19 @@ class Workstation:
             datatotal += float(data[i])
         mean = datatotal / 300
         return numpy.random.exponential(mean)
+
+    def generate_random_number_ws2(self, mean):
+        # Distribution Parameter for Exponential Distribution
+        lambda_val = 1 / mean
+        # Generating the random number in range [0,1]
+        rand_number = numpy.random.uniform(low=0.0, high=1.0)
+        rand_variate = (-1 / lambda_val) * math.log(rand_number)
+        return rand_variate
+
+    def collect_batch_results_ws(self):
+        """
+        Need to collect results after Every 500s
+        :return:
+        """
+
+        return None
