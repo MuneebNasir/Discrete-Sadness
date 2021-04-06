@@ -5,6 +5,7 @@ from simpy.resources import container
 import simpy
 import numpy
 import random
+import pathlib
 
 class Workstation:
 
@@ -51,9 +52,10 @@ class Workstation:
 
 
     def calculate_service_time(self):
+        path = pathlib.Path(__file__).parents[1].absolute()
         file_name = "ws{}.dat".format(self.work_num)
         
-        data = open("../resources/{}".format(file_name)).read().splitlines()
+        data = open("{}/resources/{}".format(path, file_name)).read().splitlines()
         return self.calculate_rand_value(data)
 
     def calculate_rand_value(self, data):
