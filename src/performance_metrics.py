@@ -109,8 +109,8 @@ def calculate_average_across_replications(data):
     print("Inspector 2 (C3) (Blocked Time/Component) Proportion: {} \n".
           format(calculate_total_average(insp_blocked_times_3, replications_count)))
     print("WS1 Throughput Average/Mean: {} \n".format(calculate_total_average(products_produced_1, replications_count)))
-    print("WS1 Throughput Average/Mean: {} \n".format(calculate_total_average(products_produced_2, replications_count)))
-    print("WS1 Throughput Average/Mean: {} \n".format(calculate_total_average(products_produced_3, replications_count)))
+    print("WS2 Throughput Average/Mean: {} \n".format(calculate_total_average(products_produced_2, replications_count)))
+    print("WS3 Throughput Average/Mean: {} \n".format(calculate_total_average(products_produced_3, replications_count)))
 
     utils.write_output("estimators", estimators, replications_count)
 

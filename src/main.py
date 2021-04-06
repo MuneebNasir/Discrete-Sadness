@@ -29,7 +29,12 @@ def run_simulation():
     print("Enter Time For Simulation in Seconds (Default - 28,000)")
     SIMULATION_TIME = int(input("Enter time: ") or "28000")
     SIMULATION_REPLICATION = int(input("Enter Replications: ") or "70")
-    ALTERNATE_DESIGN = string_to_bool(input("True/False: ") or "False")
+    print("Choose the design that you would like to use")
+    print("0: Normal design")
+    print("1: Reverse priority design")
+    print("2: Random choice")
+    print("3: Circular design")
+    ALTERNATE_DESIGN = int(input("Use design number: ") or "0")
 
     print(SIMULATION_TIME)
     print(SIMULATION_REPLICATION)
@@ -44,8 +49,8 @@ def run_simulation():
         workstation_three = Workstation(environment, 2, tracking_vars, 3)
         print("Workstations setup complete")
 
-        insepctor_one = Inspector(environment, tracking_vars, [workstation_one, workstation_two, workstation_three], 1)
-        inspector_two = Inspector(environment, tracking_vars, [workstation_two, workstation_three], 2)
+        insepctor_one = Inspector(environment, tracking_vars, [workstation_one, workstation_two, workstation_three], 1, ALTERNATE_DESIGN)
+        inspector_two = Inspector(environment, tracking_vars, [workstation_two, workstation_three], 2, 0)
         print("Inspector setup complete")
 
         print("running simulation")
