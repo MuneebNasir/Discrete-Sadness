@@ -1,6 +1,7 @@
 from workstation import *
 from component import *
 import numpy
+import pathlib
 from simpy.resources import container
 
 
@@ -28,6 +29,8 @@ class Inspector:
                 yield self.env.timeout(service_time)
                 blocked_time = self.env.now
                 
+                count = 0
+
                 if self.design_num == 0:
                     if self.workstations[0].buffers[0].level <= self.workstations[1].buffers[0].level or self.workstations[0].buffers[0].level <= self.workstations[2].buffers[0].level:
                         yield self.workstations[0].buffers[0].put(1)
@@ -57,16 +60,20 @@ class Inspector:
                 else:
                     #alternative design - circular design
                     if count == 0:
-                        yield self.workstations[0].buffers[0].put(1)
-                        print("Added component 1 to workstation 1")
+                        if self.workstations[0].buffers[0].level < 2:
+                            yield self.workstations[0].buffers[0].put(1)
+                            print("Added component 1 to workstation 1")
+
                         count += 1
                     if count == 1:
-                        yield self.workstations[1].buffers[0].put(1)
-                        print("Added component 1 to workstation 2")
+                        if self.workstations[1].buffers[0].level < 2:
+                            yield self.workstations[1].buffers[0].put(1)
+                            print("Added component 1 to workstation 2")
                         count += 1
                     if count == 2:
-                        yield self.workstations[2].buffers[0].put(1)
-                        print("Added component 1 to workstation 3")
+                        if self.workstations[2].buffers[0].level < 2:
+                            yield self.workstations[2].buffers[0].put(1)
+                            print("Added component 1 to workstation 3")
                         count = 0
 
                 self.tracking_vars.add_inspector_blocked_time(self.env.now - blocked_time, 1)
@@ -91,14 +98,14 @@ class Inspector:
     
     #opens the data files and calls the function to calcultate the proper value
     def calculate_service_time(self, component_num):
+        path = pathlib.Path(__file__).parents[1].absolute()
         if self.inspector_num == 1:
-            #file_name = "servinsp{}.dat".format(self.inspector_num)
             file_name = 'servinsp1.dat'
         else:
             file_name = 'servinsp{}{}.dat'.format(self.inspector_num, component_num)
         
-        data = open('../resources/{}'.format(file_name)).read().splitlines()
-        #data = open('..\\resources\servinsp1.dat').read().splitlines()
+        data = open('{}\\resources\\{}'.format(path, file_name)).read().splitlines()
+        print("file was opened")
         return self.calculate_rand_value(data)
 
     #finds the mean of the given data then returns a random value based on the numpy exponential function
