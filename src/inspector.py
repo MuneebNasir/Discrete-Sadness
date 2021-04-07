@@ -42,23 +42,7 @@ class Inspector:
                         yield self.workstations[2].buffers[0].put(1)
                         print("Added component 1 to workstation 3")
                 elif self.design_num == 1:
-                    #alternative design - reverse priority
-                    if self.workstations[2].buffers[0].level <= self.workstations[1].buffers[0].level or self.workstations[2].buffers[0].level <= self.workstations[0].buffers[0].level:
-                        yield self.workstations[2].buffers[0].put(1)
-                        print("Added component 1 to workstation 3")
-                    elif self.workstations[1].buffers[0].level <= self.workstations[0].buffers[0].level:
-                        yield self.workstations[1].buffers[0].put(1)
-                        print("Added component 1 to workstation 2")
-                    else:
-                        yield self.workstations[0].buffers[0].put(1)
-                        print("Added component 1 to workstation 1")
-                elif self.design_num == 2:
-                    #alternative design - random 
-                    r = random.randint(0,2)
-                    yield self.workstations[r].buffers[0].put(1)
-                    print("Added component 1 to workstation {}".format(r))
-                else:
-                    #alternative design - circular design
+                    # Alternative design - Cyclic Distribution
                     if count == 0:
                         if self.workstations[0].buffers[0].level < 2:
                             yield self.workstations[0].buffers[0].put(1)
@@ -75,6 +59,18 @@ class Inspector:
                             yield self.workstations[2].buffers[0].put(1)
                             print("Added component 1 to workstation 3")
                         count = 0
+                else:
+                    # Alternative Priority Design - reverse priority
+                    if self.workstations[2].buffers[0].level <= self.workstations[1].buffers[0].level or \
+                            self.workstations[2].buffers[0].level <= self.workstations[0].buffers[0].level:
+                        yield self.workstations[2].buffers[0].put(1)
+                        print("Added component 1 to workstation 3")
+                    elif self.workstations[1].buffers[0].level <= self.workstations[0].buffers[0].level:
+                        yield self.workstations[1].buffers[0].put(1)
+                        print("Added component 1 to workstation 2")
+                    else:
+                        yield self.workstations[0].buffers[0].put(1)
+                        print("Added component 1 to workstation 1")
 
                 self.tracking_vars.add_inspector_blocked_time(self.env.now - blocked_time, 1)
                 # Time Data Collected
@@ -103,8 +99,8 @@ class Inspector:
             file_name = 'servinsp1.dat'
         else:
             file_name = 'servinsp{}{}.dat'.format(self.inspector_num, component_num)
-        
-        data = open('{}\\resources\\{}'.format(path, file_name)).read().splitlines()
+
+        data = open('../resources/{}'.format(file_name)).read().splitlines()
         print("file was opened")
         return self.calculate_rand_value(data)
 
