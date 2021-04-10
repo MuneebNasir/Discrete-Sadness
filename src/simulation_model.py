@@ -33,7 +33,7 @@ class SimulationModel(object):
         print("Choose from the design that you would like to use")
         print("0: Normal Design")
         print("1: Cyclic Distribution")
-        print("2: Reverse Priority")
+        # print("2: Reverse Priority")
         self.ALTERNATE_DESIGN = int(input("Enter Design Number: ") or "0")
         self.validate_user_input()
 

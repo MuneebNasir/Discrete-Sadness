@@ -44,13 +44,13 @@ def calculate_replication_average(data):
     Prints the Average and Variance of the simulation output
     """
     for key, value in data.block_times.items():
-        print("Inspector {} (Idle Time/Component) Average/Mean: {} \n".format(key, numpy.mean(value)))
+        print("Inspector C{} (Blocked Time Proportion) Average/Mean: {} \n".format(key, calculate_proportion_blocked_time(value)))
     for key, value in data.products.items():
         print("Product {} (produced in 8 hour period) Average/Mean: {} \n".format(key, numpy.mean(value)))
 
 
 def calculate_throughput(datatotal):
-    simulation_time = 24800
+    simulation_time = 28800
     return datatotal / simulation_time
 
 

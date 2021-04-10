@@ -44,8 +44,8 @@ class Workstation:
             yield self.env.timeout(service_time)
 
             # Time Data Collected
-            if self.env.now > 4000:
-                self.tracking_vars.add_product(self.work_num)
+            # if self.env.now > 300:
+            self.tracking_vars.add_product(self.work_num)
 
             self.tracking_vars.add_batched_inspector_block_times(self.work_num, self.env.now)
             print("Product {} has been created".format(self.work_num))
@@ -60,7 +60,7 @@ class Workstation:
 
     def calculate_rand_value(self, data):
         datatotal = 0
-        for i in range(0,300):
+        for i in range(0, 300):
             datatotal += float(data[i])
         mean = datatotal / 300
         return numpy.random.exponential(mean)
