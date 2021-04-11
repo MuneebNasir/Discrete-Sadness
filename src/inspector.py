@@ -4,15 +4,16 @@ import numpy
 import pathlib
 from simpy.resources import container
 
-
 import random
+
+
 class Inspector:
 
     def __init__(self, env, tracking_vars, workstations, inspector_num, ALTERNATE_DESIGN):
         self.env = env
         self.tracking_vars = tracking_vars
         self.inspector_num = inspector_num
-        
+
         self.workstations = []
         for workstation in workstations:
             self.workstations.append(workstation)
@@ -28,11 +29,13 @@ class Inspector:
                 self.tracking_vars.add_inspector_service_time(service_time, 1)
                 yield self.env.timeout(service_time)
                 blocked_time = self.env.now
-                
+
                 count = 0
 
                 if self.design_num == 0:
-                    if self.workstations[0].buffers[0].level <= self.workstations[1].buffers[0].level or self.workstations[0].buffers[0].level <= self.workstations[2].buffers[0].level:
+                    # Original Design
+                    if self.workstations[0].buffers[0].level <= self.workstations[1].buffers[0].level or \
+                            self.workstations[0].buffers[0].level <= self.workstations[2].buffers[0].level:
                         yield self.workstations[0].buffers[0].put(1)
                         print("Added component 1 to workstation 1")
                     elif self.workstations[1].buffers[0].level <= self.workstations[2].buffers[0].level:
@@ -42,7 +45,7 @@ class Inspector:
                         yield self.workstations[2].buffers[0].put(1)
                         print("Added component 1 to workstation 3")
                 elif self.design_num == 1:
-                    # Alternative design - Cyclic Distribution
+                    # Alternative design - Cyclic Distribution (Main Alternate Design Used)
                     if count == 0:
                         if self.workstations[0].buffers[0].level < 2:
                             yield self.workstations[0].buffers[0].put(1)
@@ -60,7 +63,7 @@ class Inspector:
                             print("Added component 1 to workstation 3")
                         count = 0
                 else:
-                    # Alternative Priority Design - reverse priority
+                    # Alternative Priority Design (Designed but used)
                     if self.workstations[2].buffers[0].level <= self.workstations[1].buffers[0].level or \
                             self.workstations[2].buffers[0].level <= self.workstations[0].buffers[0].level:
                         yield self.workstations[2].buffers[0].put(1)
@@ -72,7 +75,8 @@ class Inspector:
                         yield self.workstations[0].buffers[0].put(1)
                         print("Added component 1 to workstation 1")
 
-                # if self.env.now > 300:
+                # Time Data Collected (Manual Analysis & Change) 4000 (Original) 500 (Alternate)
+                # if self.env.now > 500:
                 self.tracking_vars.add_inspector_blocked_time(self.env.now - blocked_time, 1)
                 # Time Data Collected
                 self.tracking_vars.add_batched_inspector_block_times(1, self.env.now)
@@ -87,14 +91,14 @@ class Inspector:
                 else:
                     index = 1
                 yield self.workstations[index].buffers[1].put(1)
-                # if self.env.now > 300:
+                # Time Data Collected (Manual Analysis) 4000 (Original) 500 (Alternate)
+                # if self.env.now > 500:
                 self.tracking_vars.add_inspector_blocked_time(self.env.now - blocked_time, component_num)
                 # Time Data Collected
                 self.tracking_vars.add_batched_inspector_block_times(component_num, self.env.now)
-                print("Added component {} to workstation {}".format(component_num, component_num))            
-        
-    
-    #opens the data files and calls the function to calcultate the proper value
+                print("Added component {} to workstation {}".format(component_num, component_num))
+
+    # opens the data files and calls the function to calculate the proper value
     def calculate_service_time(self, component_num):
         path = pathlib.Path(__file__).parents[1].absolute()
         if self.inspector_num == 1:
@@ -106,10 +110,10 @@ class Inspector:
         print("file was opened")
         return self.calculate_rand_value(data)
 
-    #finds the mean of the given data then returns a random value based on the numpy exponential function
+    # finds the mean of the given data then returns a random value based on the numpy exponential function
     def calculate_rand_value(self, data):
         datatotal = 0
-        for i in range(0,300):
+        for i in range(0, 300):
             datatotal += float(data[i])
         mean = datatotal / 300
         return numpy.random.exponential(mean)

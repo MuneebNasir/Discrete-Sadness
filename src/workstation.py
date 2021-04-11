@@ -43,8 +43,8 @@ class Workstation:
             self.tracking_vars.add_worskation_service_time(service_time, self.work_num)
             yield self.env.timeout(service_time)
 
-            # Time Data Collected
-            # if self.env.now > 300:
+            # Time Data Collected (Manual Analysis & Change) 4000 (Original) 500 (Alternate)
+            # if self.env.now > 500:
             self.tracking_vars.add_product(self.work_num)
 
             self.tracking_vars.add_batched_inspector_block_times(self.work_num, self.env.now)
